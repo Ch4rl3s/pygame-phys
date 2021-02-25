@@ -34,6 +34,8 @@ wall1 = phys.rect(0, 0, 20, 900)
 wall2 = phys.rect(1580, 0, 20, 900)
 roof = phys.rect(0, 0,  1600, 20)
 
+# polygon_arr = [phys.convexPolygon([phys.point(600, 200), phys.point(620, 210), phys.point(610, 230), phys.point(595, 225)])]
+
 objects_arr = [floor, floor2, wall1, wall2, roof]
 
 
@@ -42,7 +44,8 @@ obj = phys.ball(350, 100, 10)
 
 obj2 = phys.ball(500, 400, 30)
 
-# ball_arr = [obj, obj2]
+obj3 = phys.ball(700, 200, 20)
+
 ball_arr = [obj, obj2]
 
 picked_ball = 0
@@ -54,6 +57,8 @@ while True:
     start = tm.time()
 
     # pygame.draw.rect(screen, black, (350, 100, 1, 1))
+    for polygon in polygon_arr:
+        polygon.draw(screen)
 
     for object in objects_arr:
         pygame.draw.rect(screen, black, (object.left, object.top, object.width, object.height))
@@ -61,7 +66,7 @@ while True:
 
     for ball in ball_arr:
         ball.collision_check(ball_arr)
-        ball.update(objects_arr)
+        ball.update(objects_arr, ball_arr)
         ball.draw_forces(screen)
         pygame.draw.circle(screen, grey, (ball.x, ball.y), ball.radius, width=1)
 

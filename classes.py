@@ -29,6 +29,31 @@ def colliding_with_arr(obj, arr):
     else:
         return True
 
+class point:
+
+    x = int
+    y = int
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class convexPolygon:
+
+    points = []
+
+    def __init__(self, arr):
+        self.points = arr
+
+    def draw(self, screen):
+        try:
+            for i in range(len(self.points)-1):
+                pygame.draw.aaline(screen, black, (self.points[i].x, self.points[i].y), (self.points[i+1].x, self.points[i+1].y))
+            pygame.draw.aaline(screen, black, (self.points[0].x, self.points[0].y), (self.points[-1].x, self.points[-1].y))
+        except ValueError:
+            pass
+
+
 class rect:
 
     left = int #x
@@ -107,9 +132,14 @@ class ball:
                 dy = obj.y - self.y
                 sum_r = self.radius + obj.radius
                 if (dx**2 + dy**2) < (sum_r**2):
-                    pass
+                    vx, vy = self.v
+                    if vx != 0 and vy != 0:
+                        ovx, ovy = obj.v
+                        obj.v = ((ovx+(vx/2)),(ovy+(vy/1.2)))
+                    return True
                 else:
-                    pass
+                    return False
+
 
     def draw_forces(self, screen):
         self.h = (900-self.y)
@@ -129,14 +159,14 @@ class ball:
         else:
             return False
 
-    def update(self, objects_arr):
+    def update(self, objects_arr, self_arr):
         self.t = tm.time()-self.start
         vx, vy = self.v
         # self.x += vx/10
         if vx < 0:
             for step in range(int(abs(vx/10))):
                 self.x -= 1
-                if colliding_with_arr(self, objects_arr):
+                if colliding_with_arr(self, objects_arr) or self.collision_check(self_arr):
                     self.x += 1
                     vx = -(vx-vx/2)
                     break
@@ -145,7 +175,7 @@ class ball:
         else:
             for step in range(int(vx/10)):
                 self.x += 1
-                if colliding_with_arr(self, objects_arr):
+                if colliding_with_arr(self, objects_arr) or self.collision_check(self_arr):
                     self.x -= 1
                     vx = -(vx - vx/2)
                     break
@@ -154,7 +184,7 @@ class ball:
         if vy < 0:
             for step in range(int(abs(vy/10))):
                 self.y -= 1
-                if colliding_with_arr(self, objects_arr):
+                if colliding_with_arr(self, objects_arr) or self.collision_check(self_arr):
                     self.y += 1
                     vy = -(vy - vy/1.2)
                     break
@@ -163,7 +193,7 @@ class ball:
         else:
             for step in range(int(abs(vy/10))):
                 self.y += 1
-                if colliding_with_arr(self, objects_arr):
+                if colliding_with_arr(self, objects_arr) or self.collision_check(self_arr):
                     self.y -= 1
                     vy = -(vy - vy/1.2)
                     break
@@ -173,7 +203,7 @@ class ball:
         self.v = ((vx - vx/100), (vy - vy/100))
         sum_col = 0
         for object in objects_arr:
-            if self.collision_with_rects(object):
+            if self.collision_with_rects(object) or self.collision_check(self_arr):
                 sum_col +=1
         if sum_col == 0:
             S = int(free_fall(tm.time()-self.start))
@@ -181,7 +211,7 @@ class ball:
                 self.y+=1
                 sum = 0
                 for object in objects_arr:
-                    if self.collision_with_rects(object):
+                    if self.collision_with_rects(object) or self.collision_check(self_arr):
                         sum += 1
                 if sum==0:
                     self.on_floor = False
