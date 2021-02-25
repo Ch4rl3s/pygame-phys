@@ -38,6 +38,9 @@ class point:
         self.x = x
         self.y = y
 
+    def xy(self):
+        return (self.x, self.y)
+
 class convexPolygon:
 
     points = []
@@ -53,6 +56,27 @@ class convexPolygon:
         except ValueError:
             pass
 
+    def point_in(self, x, y):
+        try:
+            for i in range(len(self.points)-1):
+                x1, y1 = self.points[i].xy()
+                x2, y2 = self.points[i+1].xy()
+                d = ((x2 - x1) / (y2-y1) * (y-y1))
+                px = d + x1
+                if (x < px) and (y1<y<y2):
+                    return True
+                else:
+                    pass
+            x1, y1 = self.points[-1].xy()
+            x2, y2 = self.points[0].xy()
+            d = ((x2 - x1) / (y2-y1) * (y-y1))
+            px = d + x1
+            if (x < px) and (y1<y<y2):
+                return True
+
+        except ValueError:
+            pass
+        pass
 
 class rect:
 

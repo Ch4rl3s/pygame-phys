@@ -34,7 +34,7 @@ wall1 = phys.rect(0, 0, 20, 900)
 wall2 = phys.rect(1580, 0, 20, 900)
 roof = phys.rect(0, 0,  1600, 20)
 
-# polygon_arr = [phys.convexPolygon([phys.point(600, 200), phys.point(620, 210), phys.point(610, 230), phys.point(595, 225)])]
+polygon_arr = [phys.convexPolygon([phys.point(600, 200), phys.point(620, 210), phys.point(610, 230), phys.point(595, 225)])]
 
 objects_arr = [floor, floor2, wall1, wall2, roof]
 
@@ -82,6 +82,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             x,y = pygame.mouse.get_pos()
             mouse_down = True
+            polygon_arr[0].point_in(x, y)
             for ball in ball_arr:
                 if ball.coords_in_circle(x, y):
                     ball_pressed = True
