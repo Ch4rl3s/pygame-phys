@@ -82,7 +82,8 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             x,y = pygame.mouse.get_pos()
             mouse_down = True
-            polygon_arr[0].point_in(x, y)
+            if polygon_arr[0].point_in(x, y):
+                print('point in polygon')
             for ball in ball_arr:
                 if ball.coords_in_circle(x, y):
                     ball_pressed = True
